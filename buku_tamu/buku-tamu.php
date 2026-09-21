@@ -71,8 +71,9 @@
                                                 <td><?= $tamu['no_hp'] ?></td>
                                                 <td><?= $tamu['bertemu'] ?></td>
                                                 <td><?= $tamu['kepentingan'] ?></td>
-                                                <td><button class="btn btn-success" type="button">Ubah</button>
-                                                    <button class="btn btn-danger" type="button">Hapus</button>
+                                                <td>
+                                                    <a class="btn btn-success" href="edit-tamu.php?id=<?= $tamu['id_tamu'] ?>">Ubah</a>
+                                                    <a onclick="return confirm('Apakah anda yakin ingin menghapus data ini?')" class="btn btn-danger" href="hapus-tamu.php?id=<?= $tamu['id_tamu'] ?>">Hapus</a>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
