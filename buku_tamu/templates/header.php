@@ -1,3 +1,14 @@
+<?php
+// memulai session
+session_start();
+
+// cek bila tidak ada user yang login maka akan di redirect ke halaman login
+if (!isset($_SESSION['login'])) {
+    header('Location: login.php');
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,15 +23,15 @@
     <title>SB Admin 2 - Blank</title>
 
     <!-- Custom fonts for this template-->
-<link href="assets/vendor/fontawesome-free/css/all.min.css" re
-<link
-    href="https://fonts.googleapis.com/css?family=Nunito:200,2
-    rel="stylesheet">
+    <link href="assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
 
-<!-- Custom styles for this template-->
-<link href="assets/css/sb-admin-2.min.css" rel="stylesheet">
+    <!-- Custom styles for this template-->
+    <link href="assets/css/sb-admin-2.min.css" rel="stylesheet">
 
-<!-- Custom styles for this page -->
+    <!-- Custom styles for this page -->
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 </head>
@@ -51,11 +62,16 @@
                     <span>Dashboard</span></a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link" href="buku-tamu.php">
-                    <i class="fas fa-fw fa-book-open"></i>
-                    <span>Buku Tamu</span></a>
-            </li>
+            <?php
+            // cek apabila ada user login dan user role nya adalah operator maka tampilkan buku-tamu
+            if (isset($_SESSION['role']) && $_SESSION['role'] == 'operator') :
+            ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="buku-tamu.php">
+                        <i class="fas fa-fw fa-book-open"></i>
+                        <span>Buku Tamu</span></a>
+                </li>
+            <?php endif; ?>
 
             <li class="nav-item">
                 <a class="nav-link" href="laporan.php">
@@ -63,14 +79,30 @@
                     <span>Laporan</span></a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link" href="user.php">
-                    <i class="fas fa-fw fa-users"></i>
-                    <span>User</span></a>
-            </li>
+            <?php
+            // cek apabila ada user login dan user role nya adalah admin maka tampilkan user
+            if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') :
+            ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="user.php">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>User</span></a>
+                </li>
+            <?php endif; ?>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
+
+            <?php
+            // cek apabila ada user login maka tampilkan logout
+            if (isset($_SESSION['login'])) :
+            ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.php">
+                        <i class="fas fa-fw fa-power-off"></i>
+                        <span>Logout</span></a>
+                </li>
+            <?php endif; ?>
 
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
@@ -141,7 +173,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['username'] ?? 'User'; ?></span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
@@ -161,7 +193,7 @@
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="logout.php">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
